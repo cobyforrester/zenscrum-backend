@@ -5,6 +5,19 @@ from .models import Sprint
 def home_view(request, *args, **kwargs):
     return render(request, 'pages/home.html', context={}, status=200)
 
+def sprint_list_view(request, *args, **kwargs):
+    '''
+    REST API VIEW
+    Consume by JavaScript/React
+    return Json
+    '''
+    qs = Sprint.objects.all()
+    sprint_list = [{'date': x.date, 'goal': x.goal, 'project_id': x.project_id, } for x in qs]
+    data = {
+        'response': sprint_list
+    }
+    return JsonResponse(data)
+
 def sprint_details(request, sprint_number, *args, **kwargs):
     '''
     REST API VIEW
