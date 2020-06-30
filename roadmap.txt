@@ -1,0 +1,27 @@
+1. Users
+    -> Register
+    -> Login
+    -> Logout
+    -> Profile
+        -> Information
+        -> Projects
+        -> Create new/Join new Projects
+    -> Projects
+        -> Delete?
+        -> remove others?
+2. Project Aspects
+    -> Sprint plans
+        -> Sprint backlog
+            -> Assigned for each person
+        -> Definition of "Done"
+    -> Daily meeting reminders?
+    -> Daily Scrum
+    -> Sprint Review
+    -> Sprint Retrospective
+    -> Product backlog
+    -> MVP
+3. Roles
+    -> Product Owner
+    -> Scrum Master
+    -> Team Member
+
