@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from sprints.views import home_view
+from sprints.views import home_view, sprint_details
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view),
+    path('sprint/<int:sprint_number>', sprint_details),
 ]
