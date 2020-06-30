@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from .models import Sprint
 def home_view(request, *args, **kwargs):
-    return HttpResponse('<h1>Not Centered</h1>')
+    return render(request, 'pages/home.html', context={}, status=200)
 
 def sprint_details(request, sprint_number, *args, **kwargs):
     '''
