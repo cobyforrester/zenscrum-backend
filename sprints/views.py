@@ -2,8 +2,8 @@ from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render
 
 from .models import Sprint
-def home_view(request, *args, **kwargs):
-    return render(request, 'pages/home.html', context={}, status=200)
+def sprints_home_view(request, *args, **kwargs):
+    return render(request, 'sprints/sprints.html', context={}, status=200)
 
 def sprint_list_view(request, *args, **kwargs):
     '''

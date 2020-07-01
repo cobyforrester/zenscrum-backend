@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+    
+
+<!-- TITLE -->
+{% block head_title %}
+Sprints
+{% endblock head_title %}
+
+
+<!-- BODY -->
+{% block content %}
+
+<h1>Home page/Projects page</h1>
+
+<div id="sprints">
+    replace me
+</div>
+
+<script>
+const sprintsElements = document.getElementById("sprints");
+const xhr = new XMLHttpRequest();
+const type = "GET";
+const url = "/sprints";
+const responseType = "json";
+
+xhr.responseType = "json";
+xhr.open(type, url);
+xhr.onload = function() {
+    const listedItems = xhr.response.response;
+    let finalElem = "";
+    let tempElem = "";
+    for(i=0; i<listedItems.length; i++){
+        tempElem = "<div class='mb-4 sprint' id='sprint-" + listedItems[i].number + "'><h3>Sprint Number " + listedItems[i].number + "</h3>";
+        tempElem += "<p>Date: " + listedItems[i].date + "</p>";
+        tempElem += "<p>Goal: " + listedItems[i].goal + "</p>";
+        tempElem += "<div class='btn-group'><button class='btn btn-primary'>Tasks</button></div></div>"
+        finalElem += tempElem;
+    };
+    sprintsElements.innerHTML = finalElem;
+};
+xhr.send();
+
+</script>
+{% endblock content %}
