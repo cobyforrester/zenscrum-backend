@@ -12,7 +12,7 @@ def sprint_list_view(request, *args, **kwargs):
     return Json
     '''
     qs = Sprint.objects.all()
-    sprint_list = [{'date': x.date, 'goal': x.goal, 'project_id': x.project_id, } for x in qs]
+    sprint_list = [{'date': x.date, 'goal': x.goal, 'project_id': x.project_id, 'number': x.number} for x in qs]
     data = {
         'response': sprint_list
     }
@@ -25,13 +25,14 @@ def sprint_details(request, sprint_number, *args, **kwargs):
     return Json
     '''
     data = {
-        'sprint_number': sprint_number,
         #'image': obj.image.url
-    }
+}
     try:
         obj = Sprint.objects.get(number=sprint_number)
         data['date'] = obj.date
         data['goal'] = obj.goal
+        data['number'] = obj.number
+        data['project_id'] = obj.project_id
         status = 200
     except:
         data['message'] = 'Not Found'
