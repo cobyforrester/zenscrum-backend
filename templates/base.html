@@ -12,9 +12,11 @@
   </head>
   <body>
     {% include "components/navbar.html" %}
-    {% block content %}
+    <div class="container-fluid">
+      {% block content %}
     
-    {% endblock content %}
+      {% endblock content %}
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
