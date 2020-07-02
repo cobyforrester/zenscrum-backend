@@ -27,5 +27,5 @@ urlpatterns = [
     path('sprint/<int:sprint_number>', sprint_details),
 
     #projects
-    path('projects_home', projects_home_view),
+    path('', projects_home_view),
 ]

@@ -3,7 +3,7 @@
 
 <!-- TITLE -->
 {% block head_title %}
-Sprints
+Projects
 {% endblock head_title %}
 
 
@@ -33,7 +33,9 @@ xhr.onload = function() {
         tempElem = "<div class='mb-4 sprint' id='sprint-" + listedItems[i].number + "'><h3>Sprint Number " + listedItems[i].number + "</h3>";
         tempElem += "<p>Date: " + listedItems[i].date + "</p>";
         tempElem += "<p>Goal: " + listedItems[i].goal + "</p>";
-        tempElem += "<div class='btn-group'><button class='btn btn-primary'>Tasks</button></div></div>"
+        tempElem += "<div class='btn-group'><button class='btn btn-primary'"
+        tempElem += "onclick=\"window.location=\'sprints_home\'\""
+        tempElem += ">Tasks</button></div></div>"
         finalElem += tempElem;
     };
     sprintsElements.innerHTML = finalElem;
