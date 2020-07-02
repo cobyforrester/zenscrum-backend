@@ -19,7 +19,7 @@ def project_details(request, project_number, *args, **kwargs):
         data['date'] = obj.date
         data['goal'] = obj.goal
         data['number'] = obj.number
-        data['project_id'] = obj.project_id
+        data['project_id'] = obj.sprint_project.id
         status = 200
     except:
         data['message'] = 'Not Found'

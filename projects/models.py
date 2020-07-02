@@ -8,3 +8,4 @@ class Project(models.Model):
 class UserProject(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     username_project = models.TextField(default='username', blank=False, null=False)
+    

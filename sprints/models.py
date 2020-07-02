@@ -1,9 +1,11 @@
 from datetime import date
 from django.db import models
+from projects.models import Project
 
 class Sprint(models.Model):
     #id = models.AutoField(primary_key=True)
-    project_id = models.IntegerField(default=-1, blank=False, null=False)
+    #Need to make sure project_sprint is NOT NULL
+    project_sprint = models.ForeignKey(Project, on_delete=models.CASCADE, null =True)
     number = models.SmallIntegerField(default=-1, blank=False, null=False)
     date = models.DateField(default=date.today, blank=False, null=False)
     goal = models.TextField(default='AddGoal', blank=False, null=False)
