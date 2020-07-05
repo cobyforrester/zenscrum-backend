@@ -10,9 +10,14 @@ Sprints
 <!-- BODY -->
 {% block content %}
 
-<h1><h1>This is the sprints page</h1></h1>
 
-<div id="sprints">
+<div class="row text-center">
+    <div class="col">
+        <h1>This is the sprints page</h1>
+    </div>
+</div>
+
+<div class="row" id="sprints">
     replace me
 </div>
 
@@ -30,8 +35,9 @@ xhr.onload = function() {
     let finalElem = "";
     let tempElem = "";
     for(i=0; i<listedItems.length; i++){
-        tempElem = "<div class='mb-4 sprint' id='sprint-" + listedItems[i].number + "'><h3>Sprint Number " + listedItems[i].number + "</h3>";
-        tempElem += "<p>Date: " + listedItems[i].date + "</p>";
+        tempElem = "<div class='mb-4 sprint col-12 border py-3' id='sprint-" + listedItems[i].number + "'><h3>Sprint Number " + listedItems[i].number + "</h3>";
+        tempElem += "<p>Date: " + listedItems[i].start_date + "</p>";
+        tempElem += "<p>End: " + listedItems[i].start_date + "</p>";
         tempElem += "<p>Goal: " + listedItems[i].goal + "</p>";
         tempElem += "<div class='btn-group'><button class='btn btn-primary'>Tasks</button></div></div>"
         finalElem += tempElem;

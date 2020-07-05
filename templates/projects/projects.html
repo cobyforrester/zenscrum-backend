@@ -9,33 +9,42 @@ Projects
 
 <!-- BODY -->
 {% block content %}
+<div class="row text-center">
+    <div class="col">
+        <h1>Home page/Projects page</h1>
+    </div>
+</div>
 
-<h1>Home page/Projects page</h1>
 
-<div id="sprints">
+<div class="row" id="projects">
     replace me
 </div>
 
 <script>
-const sprintsElements = document.getElementById("sprints");
+// THIS SHOULD BE ACCESSING USERS ACCESS RIGHTS THEN GOING HERE
+const sprintsElements = document.getElementById("projects");
 const xhr = new XMLHttpRequest();
 const type = "GET";
-const url = "/sprints";
+const url = "/all_projects";
 const responseType = "json";
 
 xhr.responseType = "json";
 xhr.open(type, url);
 xhr.onload = function() {
     const listedItems = xhr.response.response;
+    console.log(listedItems);
     let finalElem = "";
     let tempElem = "";
     for(i=0; i<listedItems.length; i++){
-        tempElem = "<div class='mb-4 sprint' id='sprint-" + listedItems[i].number + "'><h3>Sprint Number " + listedItems[i].number + "</h3>";
-        tempElem += "<p>Date: " + listedItems[i].date + "</p>";
-        tempElem += "<p>Goal: " + listedItems[i].goal + "</p>";
-        tempElem += "<div class='btn-group'><button class='btn btn-primary'"
-        tempElem += "onclick=\"window.location=\'sprints_home\'\""
-        tempElem += ">Tasks</button></div></div>"
+        tempElem = "<div class='mb-4 sprint col-12 border-top border-bottom py-3' id='sprint-" + listedItems[i].number + "'><h3>" + listedItems[i].title + "</h3>";
+        tempElem += "<p>Start: " + listedItems[i].begin_date + "</p>";
+        tempElem += "<p>Description: " + listedItems[i].description + "</p>";
+        tempElem += "<p>ID: " + listedItems[i].id + "</p>";
+        tempElem += "<p>Owner: " + listedItems[i].owner + "</p>";
+        tempElem += "<p>Progress: " + listedItems[i].progress + "</p>";
+        tempElem += "<div class='btn-group'><button class='btn btn-success'";
+        tempElem += "onclick=\"window.location=\'sprints_home/1\'\"";
+        tempElem += ">Sprints</button></div></div>";
         finalElem += tempElem;
     };
     sprintsElements.innerHTML = finalElem;

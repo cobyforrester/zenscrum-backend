@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from sprints.views import sprints_home_view, sprint_details, sprint_list_view
-from projects.views import projects_home_view, project_details
+from projects.views import projects_home_view, project_details, print_all_projects
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -28,5 +28,6 @@ urlpatterns = [
 
     #projects
     path('', projects_home_view),
+    path('all_projects', print_all_projects),
     path('projects/<int:project_number>', project_details),
 ]

@@ -7,6 +7,7 @@ class Sprint(models.Model):
     #Need to make sure project_sprint is NOT NULL
     project_sprint = models.ForeignKey(Project, on_delete=models.CASCADE, null =True)
     number = models.SmallIntegerField(default=-1, blank=False, null=False)
-    date = models.DateField(default=date.today, blank=False, null=False)
+    start_date = models.DateField(default=date.today, blank=False, null=False)
+    end_date = models.DateField(default=date.today, blank=False, null=False)
     goal = models.TextField(default='AddGoal', blank=False, null=False)
     image = models.FileField(upload_to='images/', blank=True, null=True)
