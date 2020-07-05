@@ -22,10 +22,30 @@ Sprints
 </div>
 
 <script>
+//Here I am getting what the number is in the url
+let num = document.URL;
+let count = num.length - 1;
+let str = '';
+
+
+
+let isNumeric = (value) => {
+    return /^-{0,1}\d+$/.test(value);
+}
+
+while(isNumeric(num.substring(count, count + 1)))
+{
+    str = num.substring(count, count + 1) + str;
+    count = count - 1;
+};
+console.log(str)
+
 const sprintsElements = document.getElementById("sprints");
 const xhr = new XMLHttpRequest();
 const type = "GET";
-const url = "/sprints";
+
+//str is the number of the project
+const url = "/sprints/" + str;
 const responseType = "json";
 
 xhr.responseType = "json";

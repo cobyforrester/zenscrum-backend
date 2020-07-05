@@ -43,7 +43,7 @@ xhr.onload = function() {
         tempElem += "<p>Owner: " + listedItems[i].owner + "</p>";
         tempElem += "<p>Progress: " + listedItems[i].progress + "</p>";
         tempElem += "<div class='btn-group'><button class='btn btn-success'";
-        tempElem += "onclick=\"window.location=\'sprints_home/1\'\"";
+        tempElem += "onclick=\"window.location=\'sprints_home/"+ listedItems[i].id + "\'\"";
         tempElem += ">Sprints</button></div></div>";
         finalElem += tempElem;
     };

@@ -23,7 +23,7 @@ urlpatterns = [
 
     #sprints
     path('sprints_home/<int:project_number>', sprints_home_view),
-    path('sprints', sprint_list_view),
+    path('sprints/<int:project_id>', sprint_list_view),
     path('sprint/<int:sprint_number>', sprint_details),
 
     #projects

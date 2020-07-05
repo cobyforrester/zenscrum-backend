@@ -6,14 +6,23 @@ def sprints_home_view(request, project_number, *args, **kwargs):
     #do something with project number
     return render(request, 'sprints/sprints.html', context={}, status=200)
 
-def sprint_list_view(request, *args, **kwargs):
+def sprint_list_view(request, project_id, *args, **kwargs):
     '''
     REST API VIEW
     Consume by JavaScript/React
     return Json
     '''
     qs = Sprint.objects.all()
-    sprint_list = [{'start_date': x.start_date, 'goal': x.goal, 'project_id': x.project_sprint.id, 'number': x.number} for x in qs]
+    sprint_list = []
+    for x in qs:
+        if x.project_sprint.id == project_id:
+            tmp = {
+                'start_date': x.start_date, 
+                'goal': x.goal, 
+                'project_id': x.project_sprint.id, 
+                'number': x.number
+            }
+            sprint_list.append(tmp)
     data = {
         'response': sprint_list
     }

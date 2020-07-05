@@ -21,7 +21,7 @@ def project_details(request, project_number, *args, **kwargs):
         data['project_id'] = obj.id
         data['owner'] = obj.owner
         data['progress'] = obj.owner
-        data['description']: xobj.description
+        data['description']: obj.description
         status = 200
     except:
         data['message'] = 'Not Found'
