@@ -32,7 +32,6 @@ xhr.responseType = "json";
 xhr.open(type, url);
 xhr.onload = function() {
     const listedItems = xhr.response.response;
-    console.log(listedItems);
     let finalElem = "";
     let tempElem = "";
     for(i=0; i<listedItems.length; i++){

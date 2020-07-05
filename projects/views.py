@@ -1,9 +1,21 @@
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render
 
+from .models import Project, UserProject
+from .forms import ProjectForm
+
 from .models import Project
 def projects_home_view(request, *args, **kwargs):
     return render(request, 'projects/projects.html', context={}, status=200)
+
+def project_create_view(request, *args, **kwargs):
+    form = ProjectForm(request.POST or None)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        #form related logic here
+        obj.save()
+        form = ProjectForm()
+    return render(request, 'components/form.html', context={'form': form})
 
 def project_details(request, project_number, *args, **kwargs):
     '''
