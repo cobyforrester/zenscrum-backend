@@ -1,8 +1,12 @@
-from django.http import HttpResponse, Http404, JsonResponse
-from django.shortcuts import render
+from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
+from django.conf import settings #for safe redirect
+from django.shortcuts import render, redirect
+from django.utils.http import is_safe_url #for safe redirect
 
 from .models import Project, UserProject
 from .forms import ProjectForm
+
+ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 from .models import Project
 def projects_home_view(request, *args, **kwargs):
@@ -10,10 +14,19 @@ def projects_home_view(request, *args, **kwargs):
 
 def project_create_view(request, *args, **kwargs):
     form = ProjectForm(request.POST or None)
+    next_url = request.POST.get('next') or None
+
     if form.is_valid():
         obj = form.save(commit=False)
         #form related logic here
         obj.save()
+
+        if request.is_ajax():
+            return JsonResponse({}, status=201)
+
+        #should be a safe url!
+        if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
+            return redirect(next_url)
         form = ProjectForm()
     return render(request, 'components/form.html', context={'form': form})
 
@@ -47,7 +60,7 @@ def print_all_projects(request, *args, **kwargs):
     return Json
     '''
     qs = Project.objects.all()
-    sprint_list = [{'begin_date': x.begin_date, 'title': x.title, 'description': x.description, 'id': x.id, 'owner': x.owner, 'progress': x.progress} for x in qs]
+    sprint_list = [x.serialize() for x in qs]
     data = {
         'response': sprint_list
     }

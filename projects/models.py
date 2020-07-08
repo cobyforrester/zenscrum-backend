@@ -2,11 +2,19 @@ from datetime import date
 from django.db import models
 
 class Project(models.Model):
-    title = models.TextField(default='AddTitle', blank=False, null=False)
+    title = models.TextField(default='Title', blank=False, null=False)
     begin_date = models.DateField(default=date.today, blank=False, null=False)
-    description = models.TextField(default='AddGoal', blank=False, null=False)
+    description = models.TextField(default='Description', blank=False, null=False)
     owner = models.TextField(default='Owner', blank=True, null=False) # CHANGE TO NULL=FALSE
     progress = models.BooleanField(default=False, null=False)
+    def serialize(self):
+        return{
+            'title': self.title,
+            'begin_date': self.begin_date,
+            'description': self.description,
+            'owner': self.owner,
+            'progress': self.progress
+        }
 class UserProject(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     username_project = models.TextField(default='username', blank=False, null=False)

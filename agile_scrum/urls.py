@@ -25,13 +25,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     #sprints
-    path('sprints_home/<int:project_number>', sprints_home_view),
+    path('sprints-home/<int:project_number>', sprints_home_view),
     path('sprints/<int:project_id>', sprint_list_view),
     path('sprint/<int:sprint_number>', sprint_details),
 
     #projects
     path('', projects_home_view),
-    path('create_project', project_create_view),
-    path('all_projects', print_all_projects),
+    path('create-project', project_create_view),
+    path('all-projects', print_all_projects),
     path('projects/<int:project_number>', project_details),
 ]

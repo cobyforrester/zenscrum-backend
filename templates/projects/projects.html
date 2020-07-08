@@ -15,6 +15,20 @@ Projects
     </div>
 </div>
 
+<div class="row mb-4">
+    <div class = 'col-md-4 mx-auto col-10'>
+        <form class='form' id='project-create-form' method='POST' action='/create-project'>
+            {% csrf_token %}
+            <input type='hidden' value='/' name='next' />
+            <textarea class='form-control' name='title', placeholder='Title...'></textarea>
+            <textarea class='form-control' name='description', placeholder='Description...'></textarea>
+            <textarea class='form-control' name='owner', placeholder='Owner...'></textarea>
+            <input type="date" name="begin_date" value="2018-07-22">
+            <button type='submit' class='btn btn-primary'>Add Project</button>
+        </form>
+    </div>
+</div>
+
 
 <div class="row" id="projects">
     replace me
@@ -22,33 +36,67 @@ Projects
 
 <script>
 // THIS SHOULD BE ACCESSING USERS ACCESS RIGHTS THEN GOING HERE
-const sprintsElements = document.getElementById("projects");
-const xhr = new XMLHttpRequest();
-const type = "GET";
-const url = "/all_projects";
-const responseType = "json";
+const handleProjectFormSubmit = (event) =>
+{
+    event.preventDefault()
+    const myForm = event.target
+    const myFormData = new FormData(myForm)
+    const url = myForm.getAttribute("action")
+    const method = myForm.getAttribute("method")
+    console.log(url, method)
 
-xhr.responseType = "json";
-xhr.open(type, url);
-xhr.onload = function() {
-    const listedItems = xhr.response.response;
-    let finalElem = "";
-    let tempElem = "";
-    for(i=0; i<listedItems.length; i++){
-        tempElem = "<div class='mb-4 sprint col-12 border-top border-bottom py-3' id='sprint-" + listedItems[i].number + "'><h3>" + listedItems[i].title + "</h3>";
-        tempElem += "<p>Start: " + listedItems[i].begin_date + "</p>";
-        tempElem += "<p>Description: " + listedItems[i].description + "</p>";
-        tempElem += "<p>ID: " + listedItems[i].id + "</p>";
-        tempElem += "<p>Owner: " + listedItems[i].owner + "</p>";
-        tempElem += "<p>Progress: " + listedItems[i].progress + "</p>";
-        tempElem += "<div class='btn-group'><button class='btn btn-success'";
-        tempElem += "onclick=\"window.location=\'sprints_home/"+ listedItems[i].id + "\'\"";
-        tempElem += ">Sprints</button></div></div>";
-        finalElem += tempElem;
+    const xhr = new XMLHttpRequest()
+    xhr.open(method, url)
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+    xhr.onload = function() 
+    {
+        const rsp = xhr.response
+        const listedItems = rsp.response;
+        console.log(rsp)
+    }
+    xhr.send(myFormData)
+    loadProjects(projectElements)
+}
+
+const projectFormCreateElements = document.getElementById("project-create-form")
+
+projectFormCreateElements.addEventListener("submit", handleProjectFormSubmit)
+
+const projectElements = document.getElementById("projects")
+
+const loadProjects = (projectElements) =>
+{
+    const xhr = new XMLHttpRequest()
+    const type = "GET"
+    const url = "/all-projects"
+    const responseType = "json"
+
+    xhr.responseType = "json";
+    xhr.open(type, url);
+    xhr.onload = function() {
+        const listedItems = xhr.response.response;
+        let finalElem = "";
+        let tempElem = "";
+        for(i=0; i<listedItems.length; i++){
+            tempElem = "<div class='mb-4 sprint col-12 border-top border-bottom py-3' id='sprint-" + listedItems[i].number + "'><h3>" + listedItems[i].title + "</h3>";
+            tempElem += "<p>Start: " + listedItems[i].begin_date + "</p>";
+            tempElem += "<p>Description: " + listedItems[i].description + "</p>";
+            tempElem += "<p>ID: " + listedItems[i].id + "</p>";
+            tempElem += "<p>Owner: " + listedItems[i].owner + "</p>";
+            tempElem += "<p>Progress: " + listedItems[i].progress + "</p>";
+            tempElem += "<div class='btn-group'><button class='btn btn-primary'";
+            tempElem += "onclick=\"window.location=\'sprints-home/"+ listedItems[i].id + "\'\"";
+            tempElem += ">Sprints</button></div></div>";
+            finalElem += tempElem;
+        };
+        projectElements.innerHTML = finalElem;
     };
-    sprintsElements.innerHTML = finalElem;
-};
-xhr.send();
+    xhr.send();
+}
+
+loadProjects(projectElements);
+
 
 </script>
 {% endblock content %}
