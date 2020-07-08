@@ -7,8 +7,12 @@ class Project(models.Model):
     description = models.TextField(default='Description', blank=False, null=False)
     owner = models.TextField(default='Owner', blank=True, null=False) # CHANGE TO NULL=FALSE
     progress = models.BooleanField(default=False, null=False)
+
+    class Meta:
+        ordering = ['-id'] #This makes the table in DESCENDING ORDER, default is ASC
     def serialize(self):
         return{
+            'id': self.id,
             'title': self.title,
             'begin_date': self.begin_date,
             'description': self.description,

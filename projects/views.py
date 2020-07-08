@@ -17,17 +17,20 @@ def project_create_view(request, *args, **kwargs):
     next_url = request.POST.get('next') or None
 
     if form.is_valid():
+        form.clean_content()
         obj = form.save(commit=False)
         #form related logic here
         obj.save()
 
         if request.is_ajax():
-            return JsonResponse({}, status=201)
+            return JsonResponse(obj.serialize(), status=201)
 
         #should be a safe url!
         if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
             return redirect(next_url)
         form = ProjectForm()
+    if form.errors and request.is_ajax():
+        return JsonResponse(form.errors, status=400)
     return render(request, 'components/form.html', context={'form': form})
 
 def project_details(request, project_number, *args, **kwargs):
