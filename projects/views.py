@@ -1,5 +1,5 @@
 from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
-from django.conf import settings #for safe redirect
+from django.conf import settings #for safe redirect, users
 from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url #for safe redirect
 
@@ -13,23 +13,31 @@ def projects_home_view(request, *args, **kwargs):
     return render(request, 'projects/projects.html', context={}, status=200)
 
 def project_create_view(request, *args, **kwargs):
+    #This is for checking the user is valid
+    user = request.user
+    if not request.user.is_authenticated:
+        user = None
+        if request.is_ajax:
+            return JsonResponse({}, status = 401) #not authorized
+        return redirect(settings.LOGIN_URL)
+    #We are processing the form here for a POST and getting the next url desired
     form = ProjectForm(request.POST or None)
     next_url = request.POST.get('next') or None
-
+    #form is valid, save and if ajax JsonResponse else redirect to next_url
     if form.is_valid():
         obj = form.save(commit=False)
-        #form related logic here
+        obj.puser = user #adding user to object
         obj.save()
-
         if request.is_ajax():
             return JsonResponse(obj.serialize(), status=201)
-
         #should be a safe url!
         if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
             return redirect(next_url)
         form = ProjectForm()
+    #if errors and ajax return errors
     if form.errors and request.is_ajax():
         return JsonResponse(form.errors, status=400)
+    #finally return if not ajax and errors
     return render(request, 'components/form.html', context={'form': form})
 
 def project_details(request, project_number, *args, **kwargs):

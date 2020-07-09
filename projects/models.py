@@ -5,7 +5,7 @@ from django.db import models
 User = settings.AUTH_USER_MODEL
 
 class Project(models.Model):
-    puser = models.ForeignKey(User, on_delete=models.CASCADE) #many users canhave many projects
+    puser = models.ForeignKey(User, on_delete=models.CASCADE) #many users can have many projects
     title = models.TextField(default='Title', blank=False, null=False)
     begin_date = models.DateField(default=date.today, blank=False, null=False)
     description = models.TextField(default='Description', blank=False, null=False)

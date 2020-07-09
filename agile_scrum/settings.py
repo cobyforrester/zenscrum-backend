@@ -27,6 +27,7 @@ SECRET_KEY = 'lu66acv$upub%36nv#^-e326l)309=kted+j7d)d04@2++k&s5'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']  #Add domain when established!!!
+LOGIN_URL = '/login'
 
 
 # Application definition
