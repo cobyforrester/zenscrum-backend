@@ -32,6 +32,15 @@ def view_projects(request, *args, **kwargs):
     serializer = ProjectSerializer(qs, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def project_details(request, project_id, *args, **kwargs):
+    qs = Project.objects.filter(id=project_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    obj = qs.first()
+    serializer = ProjectSerializer(obj)
+    return Response(serializer.data)
+
 
 
 def project_create_view_pure_django(request, *args, **kwargs):
@@ -67,7 +76,7 @@ def project_create_view_pure_django(request, *args, **kwargs):
     #finally return if not ajax and errors
     return render(request, 'components/form.html', context={'form': form})
 
-def project_details(request, project_number, *args, **kwargs):
+def project_details_pure_django(request, project_number, *args, **kwargs):
     '''
     REST API VIEW
     Consume by JavaScript/React

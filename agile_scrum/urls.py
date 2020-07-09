@@ -33,5 +33,5 @@ urlpatterns = [
     path('', projects_home_view),
     path('create-project', project_create_view),
     path('view-projects', view_projects),
-    path('projects/<int:project_number>', project_details),
+    path('project-details/<int:project_id>', project_details),
 ]
