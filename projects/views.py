@@ -17,7 +17,6 @@ def project_create_view(request, *args, **kwargs):
     next_url = request.POST.get('next') or None
 
     if form.is_valid():
-        form.clean_content()
         obj = form.save(commit=False)
         #form related logic here
         obj.save()

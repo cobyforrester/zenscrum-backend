@@ -15,11 +15,13 @@ Projects
     </div>
 </div>
 
+<!-- Form for projects -->
 <div class="row mb-4">
     <div class = 'col-md-4 mx-auto col-10'>
         <form class='form' id='project-create-form' method='POST' action='/create-project'>
             {% csrf_token %}
             <input type='hidden' value='/' name='next' />
+            <div class='d-none alert alert-danger' id='project-form-error'></div>
             <textarea required='required' class='form-control' name='title', placeholder='Title...'></textarea>
             <textarea required='required' class='form-control' name='description', placeholder='Description...'></textarea>
             <textarea required='required' class='form-control' name='owner', placeholder='Owner...'></textarea>
@@ -36,6 +38,23 @@ Projects
 
 <script>
 // THIS SHOULD BE ACCESSING USERS ACCESS RIGHTS THEN GOING HERE
+
+let handleFormError = (msg, display) =>
+{
+    let myError = document.getElementById("project-form-error")
+    if(display === true)
+    {
+        //show error
+        myError.setAttribute("class", "d-block alert alert-danger")
+        myError.innerHTML = msg
+    }
+    else
+    {
+        //hide error
+        myError.setAttribute("class", "d-none alert alert-danger")
+    }
+}
+
 const handleProjectFormSubmit = (event) =>
 {
     event.preventDefault()
@@ -53,6 +72,7 @@ const handleProjectFormSubmit = (event) =>
     {
         if(xhr.status === 201)
         {
+            handleFormError("", false)
             const newProjectJson = xhr.response
             const newProjectElem = formatProjectElement(newProjectJson)
             const ogHtml = projectElements.innerHTML
@@ -62,9 +82,33 @@ const handleProjectFormSubmit = (event) =>
         else if(xhr.status === 400)
         {
             const errorJson = xhr.response
-            console.log(errorJson)
-
+            const contError = Object.values(errorJson)
+            let errorMessage;
+            if(contError)
+            {
+                errorMessage = contError[0]
+                if(errorMessage)
+                {
+                    handleFormError(errorMessage, true)
+                }
+                else 
+                {
+                    alert("Error occured. Please try again.")
+                }
+            }
+            else
+            {
+                alert("Error occured. Please try again.")
+            }
         }
+        else if(xhr.status === 400)
+        {
+            alert("There was a server error, please try again")
+        }
+    }
+    xhr.onerror = function()
+    {
+        alert("Errors occurred")
     }
     xhr.send(myFormData)
 }
