@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']  #Add domain when established!!!
 LOGIN_URL = '/login'
+#information for projects
+MAX_DESCRIPTION_LENGTH = 120 
+MAX_TITLE_LENGTH = 30
 
 
 # Application definition
@@ -40,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #third party
-    'rest_framework'
+    'rest_framework',
     #internal
     'sprints',
     'projects',

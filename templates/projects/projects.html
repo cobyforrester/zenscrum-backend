@@ -128,20 +128,20 @@ const loadProjects = (projectElements) =>
 {
     const xhr = new XMLHttpRequest()
     const type = "GET"
-    const url = "/all-projects"
+    const url = "/view-projects"
     const responseType = "json"
 
     xhr.responseType = "json";
     xhr.open(type, url);
     xhr.onload = function() 
     {
-        const listedItems = xhr.response.response;
+        const listedItems = xhr.response
         let finalElem = "";
         for(i=0; i<listedItems.length; i++)
         {
             finalElem += formatProjectElement(listedItems[i])
         }
-        projectElements.innerHTML = finalElem;
+        projectElements.innerHTML = finalElem
     }
     xhr.send();
 }

@@ -3,5 +3,8 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"settings": {
+		"python.pythonPath": "/Users/cobyforrester/.local/share/virtualenvs/backend-PUpMGe2w/bin/python"
+	}
 }

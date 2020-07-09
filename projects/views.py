@@ -3,8 +3,11 @@ from django.conf import settings #for safe redirect, users
 from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url #for safe redirect
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view #a decorator for types ex. POST, GET
 from .models import Project, UserProject
 from .forms import ProjectForm
+from .serializers import ProjectSerializer
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
@@ -12,7 +15,31 @@ from .models import Project
 def projects_home_view(request, *args, **kwargs):
     return render(request, 'projects/projects.html', context={}, status=200)
 
+#using django rest framework, wayyy cleaner
+#this posts data to projects
+@api_view(['POST'])
 def project_create_view(request, *args, **kwargs):
+    serializer = ProjectSerializer(data=request.POST)
+    if serializer.is_valid():
+        serializer.save(puser=request.user)
+        return Response(serializer.data, status=201)
+    return Response({}, status=400)
+
+#gets projects
+@api_view(['GET'])
+def view_projects(request, *args, **kwargs):
+    qs = Project.objects.all()
+    serializer = ProjectSerializer(qs, many=True)
+    return Response(serializer.data)
+
+
+
+def project_create_view_pure_django(request, *args, **kwargs):
+    '''
+    REST API VIEW
+    Consume by JavaScript/React
+    return Json
+    '''
     #This is for checking the user is valid
     user = request.user
     if not request.user.is_authenticated:
@@ -63,7 +90,7 @@ def project_details(request, project_number, *args, **kwargs):
         status = 404
     return JsonResponse(data, status=status)
 
-def print_all_projects(request, *args, **kwargs):
+def print_all_projects_pure_django(request, *args, **kwargs):
     '''
     REST API VIEW
     Consume by JavaScript/React

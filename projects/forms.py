@@ -1,8 +1,9 @@
 from django import forms
+from django.conf import settings
 from .models import Project
 
-MAX_DESCRIPTION_LENGTH = 120
-MAX_TITLE_LENGTH = 30
+MAX_DESCRIPTION_LENGTH = settings.MAX_DESCRIPTION_LENGTH
+MAX_TITLE_LENGTH = settings.MAX_TITLE_LENGTH
 
 class ProjectForm(forms.ModelForm):
     class Meta:
