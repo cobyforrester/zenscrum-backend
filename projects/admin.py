@@ -3,7 +3,11 @@ from django.contrib import admin
 # Register your models here.
 from .models import Project, UserProject
 
+class UserProjectAdmin(admin.TabularInline):
+    model = UserProject
+
 class ProjectAdmin(admin.ModelAdmin):
+    inlines = [UserProjectAdmin]
     list_display = ['__str__', 'user'] #this just displays for the admin the values
     search_fields = ['title','user__username', 'user__email']
 
