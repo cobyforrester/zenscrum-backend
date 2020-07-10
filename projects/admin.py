@@ -4,8 +4,8 @@ from django.contrib import admin
 from .models import Project, UserProject
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'puser'] #this just displays for the admin the values
-    search_fields = ['title','puser__username', 'puser__email']
+    list_display = ['__str__', 'user'] #this just displays for the admin the values
+    search_fields = ['title','user__username', 'user__email']
 
     class Meta:
         model = Project

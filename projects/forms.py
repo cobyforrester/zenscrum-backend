@@ -8,7 +8,7 @@ MAX_TITLE_LENGTH = settings.MAX_TITLE_LENGTH
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'begin_date', 'description', 'owner']
+        fields = ['title', 'begin_date', 'description', 'user']
 
     #validate content
     def clean(self):

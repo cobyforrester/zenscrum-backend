@@ -25,7 +25,7 @@ def projects_home_view(request, *args, **kwargs):
 def project_create_view(request, *args, **kwargs):
     serializer = ProjectSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):
-        serializer.save(puser=request.user)
+        serializer.save(user=request.user)
         return Response(serializer.data, status=201)
     return Response({}, status=400)
 
@@ -51,7 +51,7 @@ def delete_project(request, project_id, *args, **kwargs):
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
         return Response({}, status=404)
-    qs = qs.filter(puser=request.user)
+    qs = qs.filter(user=request.user)
     if not qs.exists():
         return Response({'message': 'You cannot delete this Project'}, status=401)
     obj = qs.first()
@@ -79,7 +79,7 @@ def project_create_view_pure_django(request, *args, **kwargs):
     #form is valid, save and if ajax JsonResponse else redirect to next_url
     if form.is_valid():
         obj = form.save(commit=False)
-        obj.puser = user #adding user to object
+        obj.user = user #adding user to object
         obj.save()
         if request.is_ajax():
             return JsonResponse(obj.serialize(), status=201)
@@ -107,8 +107,8 @@ def project_details_pure_django(request, project_number, *args, **kwargs):
         data['begin_date'] = obj.begin_date
         data['title'] = obj.title
         data['project_id'] = obj.id
-        data['owner'] = obj.owner
-        data['progress'] = obj.owner
+        data['user'] = obj.user
+        data['progress'] = obj.progress
         data['description']: obj.description
         status = 200
     except:

@@ -1,14 +1,14 @@
 from django.conf import settings
 from rest_framework import serializers
 
-from  .models import Project, UserProject
+from .models import Project, UserProject
 
 MAX_DESCRIPTION_LENGTH = settings.MAX_DESCRIPTION_LENGTH
 MAX_TITLE_LENGTH = settings.MAX_TITLE_LENGTH
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ['title', 'begin_date', 'description', 'owner']
+        fields = ['id', 'title', 'begin_date', 'description', 'progress']
 
     #validate description
     def validate_description(self, value):
