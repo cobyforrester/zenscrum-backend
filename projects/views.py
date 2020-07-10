@@ -3,8 +3,10 @@ from django.conf import settings #for safe redirect, users
 from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url #for safe redirect
 
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
-from rest_framework.decorators import api_view #a decorator for types ex. POST, GET
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from .models import Project, UserProject
 from .forms import ProjectForm
 from .serializers import ProjectSerializer
@@ -18,9 +20,11 @@ def projects_home_view(request, *args, **kwargs):
 #using django rest framework, wayyy cleaner
 #this posts data to projects
 @api_view(['POST'])
+#@authentication_classes([SessionAuthentication, CustomAuthentication])
+@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def project_create_view(request, *args, **kwargs):
     serializer = ProjectSerializer(data=request.POST)
-    if serializer.is_valid():
+    if serializer.is_valid(raise_exception=True):
         serializer.save(puser=request.user)
         return Response(serializer.data, status=201)
     return Response({}, status=400)
@@ -39,7 +43,20 @@ def project_details(request, project_id, *args, **kwargs):
         return Response({}, status=404)
     obj = qs.first()
     serializer = ProjectSerializer(obj)
-    return Response(serializer.data)
+    return Response(serializer.data, status=200)
+
+@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
+@api_view(['DELETE', 'POST'])
+def delete_project(request, project_id, *args, **kwargs):
+    qs = Project.objects.filter(id=project_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    qs = qs.filter(user=request.user)
+    if not qs.exists():
+        return Response({'message': 'You cannot delete this Project'}, status=401)
+    obj = qs.first()
+    obj.delete()
+    return Response({'message': 'Project removed'}, status=200)
 
 
 
