@@ -51,7 +51,7 @@ def delete_project(request, project_id, *args, **kwargs):
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
         return Response({}, status=404)
-    qs = qs.filter(user=request.user)
+    qs = qs.filter(puser=request.user)
     if not qs.exists():
         return Response({'message': 'You cannot delete this Project'}, status=401)
     obj = qs.first()

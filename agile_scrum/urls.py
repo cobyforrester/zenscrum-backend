@@ -19,7 +19,7 @@ from django.urls import path
 from sprints.views import sprints_home_view, sprint_details, sprint_list_view
 from projects.views import (
     projects_home_view, project_details, 
-    view_projects, project_create_view
+    view_projects, project_create_view, delete_project,
 )
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,5 +33,6 @@ urlpatterns = [
     path('', projects_home_view),
     path('create-project', project_create_view),
     path('view-projects', view_projects),
-    path('project-details/<int:project_id>', project_details),
+    path('project/<int:project_id>', project_details),
+    path('api/project/<int:project_id>/delete', delete_project),
 ]
