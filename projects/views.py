@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Project, UserProject
 from .forms import ProjectForm
-from .serializers import ProjectSerializer
+from .serializers import ProjectSerializerPost, ProjectSerializerGet, ProjectActionSerializer
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
@@ -23,7 +23,7 @@ def projects_home_view(request, *args, **kwargs):
 #@authentication_classes([SessionAuthentication, CustomAuthentication])
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def project_create_view(request, *args, **kwargs):
-    serializer = ProjectSerializer(data=request.POST)
+    serializer = ProjectSerializerPost(data=request.POST)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status=201)
@@ -33,7 +33,7 @@ def project_create_view(request, *args, **kwargs):
 @api_view(['GET'])
 def view_projects(request, *args, **kwargs):
     qs = Project.objects.all()
-    serializer = ProjectSerializer(qs, many=True)
+    serializer = ProjectSerializerGet(qs, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -42,7 +42,7 @@ def project_details(request, project_id, *args, **kwargs):
     if not qs.exists():
         return Response({}, status=404)
     obj = qs.first()
-    serializer = ProjectSerializer(obj)
+    serializer = ProjectSerializerGet(obj)
     return Response(serializer.data, status=200)
 
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
@@ -57,6 +57,32 @@ def delete_project(request, project_id, *args, **kwargs):
     obj = qs.first()
     obj.delete()
     return Response({'message': 'Project removed'}, status=200)
+
+@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
+@api_view(['POST'])
+def project_action_member(request, project_id, *args, **kwargs):
+    '''
+    id is required
+    Action options are: add, remove, view (maybe view)
+    '''
+    serializer = ProjectActionSerializer(data=request.POST)
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        project_id = data.get('id')
+        action = data.get('action')
+    
+    qs = Project.objects.filter(id=project_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    qs = qs.filter(user=request.user)
+    obj = qs.first()
+    if action == 'add' and request.user not in obj.members.all():
+        obj.members.add(request.user)
+    elif action == 'remove' and request.user in obj.members.all():
+        obj.members.remove(request.user)
+    elif action == 'view':
+        pass #this is to do
+    return Response({'message': 'Action performed'}, status=200)
 
 
 

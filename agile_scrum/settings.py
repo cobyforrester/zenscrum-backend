@@ -31,6 +31,7 @@ LOGIN_URL = '/login'
 #information for projects
 MAX_DESCRIPTION_LENGTH = 120 
 MAX_TITLE_LENGTH = 30
+PROJECT_MEMBERS_ACTION_OPTIONS = ['add', 'remove', 'view']
 
 
 # Application definition

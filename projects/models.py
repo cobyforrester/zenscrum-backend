@@ -11,7 +11,7 @@ class UserProject(models.Model):
 
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) #many users can have many projects
-    members = models.ManyToManyField(User, related_name='group_member', blank=True) #to store list of people
+    members = models.ManyToManyField(User, related_name='group_member', blank=True, through=UserProject) #to store list of people
     title = models.TextField(default='Title', blank=False, null=False)
     begin_date = models.DateField(default=date.today, blank=False, null=False)
     description = models.TextField(default='Description', blank=False, null=False)
