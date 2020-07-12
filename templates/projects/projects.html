@@ -177,6 +177,7 @@ let formatProjectElement = (item) =>
     tempElem += ">Sprints</button></div>";
     //This is the form below for adding
     tempElem += "<form id='addForm" + item.id + "' >"
+    tempElem += "{% csrf_token %}"
     tempElem += "<label for='addName'>Username to add to project </label>"
     tempElem += "<input id='addName"+ item.id +"' name='name' value='' placeholder='Enter Username'>"
     tempElem += "<button type='button' class='btn btn-danger' onclick=handleAddMember"
