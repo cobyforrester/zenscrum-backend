@@ -40,6 +40,14 @@ Projects
 <script>
 // THIS SHOULD BE ACCESSING USERS ACCESS RIGHTS THEN GOING HERE
 
+let handleAddMember = (project_id, form) =>
+{
+    console.log(project_id)
+    console.log(form)
+    x = document.getElementById(form).value;
+    console.log(x)
+}
+
 let handleFormError = (msg, display) =>
 {
     let myError = document.getElementById("project-form-error")
@@ -163,9 +171,17 @@ let formatProjectElement = (item) =>
     tempElem += "<p>ID: " + item.id + "</p>";
     tempElem += "<p>Owner: " + item.user + "</p>";
     tempElem += "<p>Progress: " + item.progress + "</p>";
+    tempElem += "<p>Members: " + item.members + "</p>";
     tempElem += "<div class='btn-group'><button class='btn btn-primary'";
     tempElem += "onclick=\"window.location=\'sprints-home/"+ item.id + "\'\"";
-    tempElem += ">Sprints</button></div></div>";
+    tempElem += ">Sprints</button></div>";
+    //This is the form below for adding
+    tempElem += "<form id='addForm" + item.id + "' >"
+    tempElem += "<label for='addName'>Username to add to project </label>"
+    tempElem += "<input id='addName"+ item.id +"' name='name' value='' placeholder='Enter Username'>"
+    tempElem += "<button type='button' class='btn btn-danger' onclick=handleAddMember"
+    tempElem += "(" + item.id + ",'addName" + item.id + "')>Add Member</button>"
+    tempElem += "</form></div>"
     return(tempElem)
 }
 

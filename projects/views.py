@@ -31,12 +31,14 @@ def project_create_view(request, *args, **kwargs):
 
 #gets projects
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def view_projects(request, *args, **kwargs):
     qs = Project.objects.all()
     serializer = ProjectSerializerGet(qs, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def project_details(request, project_id, *args, **kwargs):
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
@@ -45,8 +47,8 @@ def project_details(request, project_id, *args, **kwargs):
     serializer = ProjectSerializerGet(obj)
     return Response(serializer.data, status=200)
 
-@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 @api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def delete_project(request, project_id, *args, **kwargs):
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
@@ -58,8 +60,8 @@ def delete_project(request, project_id, *args, **kwargs):
     obj.delete()
     return Response({'message': 'Project removed'}, status=200)
 
-@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 @api_view(['POST'])
+@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def project_action_member(request, project_id, *args, **kwargs):
     '''
     id is required
