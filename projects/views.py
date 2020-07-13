@@ -79,18 +79,19 @@ def project_action_member(request, *args, **kwargs):
         return Response({}, status=404)
     qs = qs.filter(user=request.user)
     obj = qs.first()
+    if not obj:
+        return Response({}, status=403)
 
     #for if the user is not found
     try:
         member = User.objects.get(username=new_member)
     except:
         return Response({}, status=404)
-        
-    if action == 'add' and request.user not in obj.members.all() and obj:
+    if action == 'add' and obj and request.user not in obj.members.all():
         obj.members.add(member)
         serializer = ProjectSerializerGet(obj)
         return Response(serializer.data, status=200)
-    elif action == 'remove' and request.user in obj.members.all() and obj:
+    elif action == 'remove' and obj and request.user in obj.members.all():
         obj.members.remove(member)
         serializer = ProjectSerializerGet(obj)
         return Response(serializer.data, status=200)

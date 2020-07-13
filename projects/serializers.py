@@ -19,7 +19,6 @@ class ProjectActionSerializer(serializers.Serializer):
         return value
 #for posting data
 class ProjectSerializerPost(serializers.ModelSerializer):
-    members = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Project
         fields = ['id', 'title', 'begin_date', 'description', 'progress']
