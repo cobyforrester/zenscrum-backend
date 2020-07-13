@@ -10,7 +10,7 @@ class UserProject(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 class Project(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE) #many users can have many projects
+    user = models.ForeignKey(User, on_delete=models.CASCADE) #this is actually the owner
     members = models.ManyToManyField(User, related_name='group_member', blank=True, through=UserProject) #to store list of people
     title = models.TextField(default='Title', blank=False, null=False)
     begin_date = models.DateField(default=date.today, blank=False, null=False)

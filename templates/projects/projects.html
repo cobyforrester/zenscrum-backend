@@ -38,14 +38,53 @@ Projects
 </div>
 
 <script>
-// THIS SHOULD BE ACCESSING USERS ACCESS RIGHTS THEN GOING HERE
 
-let handleAddMember = (project_id, form) =>
+//Straight from Django documentation
+const getCookie = (name) =>
 {
-    console.log(project_id)
-    console.log(form)
-    x = document.getElementById(form).value;
-    console.log(x)
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') 
+    {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) 
+        {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+let handleMemberAction = (project_id, form, action) =>
+{
+    let new_member= document.getElementById(form).value;
+    const url = "/api/projects/action"
+    const method = "POST"
+    const data = JSON.stringify({
+        id: project_id,
+        action: action,
+        new_member: new_member
+    })
+    const xhr = new XMLHttpRequest()
+    const csrftoken = getCookie('csrftoken');
+    xhr.open(method, url)
+    xhr.setRequestHeader("Content-Type", "application/json")
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+    xhr.onload = () =>
+    {
+        console.log(xhr.status)
+        console.log(xhr.response)
+    }
+    xhr.send(data)
+    document.getElementById(form).value = '';
+    loadProjects(projectElements);
 }
 
 let handleFormError = (msg, display) =>
@@ -177,11 +216,14 @@ let formatProjectElement = (item) =>
     tempElem += ">Sprints</button></div>";
     //This is the form below for adding
     tempElem += "<form id='addForm" + item.id + "' >"
-    tempElem += "{% csrf_token %}"
     tempElem += "<label for='addName'>Username to add to project </label>"
     tempElem += "<input id='addName"+ item.id +"' name='name' value='' placeholder='Enter Username'>"
-    tempElem += "<button type='button' class='btn btn-danger' onclick=handleAddMember"
-    tempElem += "(" + item.id + ",'addName" + item.id + "')>Add Member</button>"
+    //Add button
+    tempElem += "<button type='button' class='btn btn-info' onclick=\"handleMemberAction"
+    tempElem += "(" + item.id + ",'addName" + item.id + "', 'add')\">Add Member</button>"
+    //Remove button
+    tempElem += "<button type='button' class='btn btn-danger' onclick=\"handleMemberAction"
+    tempElem += "(" + item.id + ",'addName" + item.id + "', 'remove')\">Remove Member</button>"
     tempElem += "</form></div>"
     return(tempElem)
 }

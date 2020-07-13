@@ -7,9 +7,10 @@ MAX_DESCRIPTION_LENGTH = settings.MAX_DESCRIPTION_LENGTH
 MAX_TITLE_LENGTH = settings.MAX_TITLE_LENGTH
 PROJECT_MEMBERS_ACTION_OPTIONS = settings.PROJECT_MEMBERS_ACTION_OPTIONS
 
-class ProjectActionSerializer(serializers.ModelSerializer):
+class ProjectActionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     action = serializers.CharField()
+    new_member = serializers.CharField()
 
     def validate_action(self, value):
         value = value.lower().strip()

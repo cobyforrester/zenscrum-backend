@@ -2,6 +2,7 @@ from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirec
 from django.conf import settings #for safe redirect, users
 from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url #for safe redirect
+from django.contrib.auth.models import User
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
@@ -62,29 +63,40 @@ def delete_project(request, project_id, *args, **kwargs):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
-def project_action_member(request, project_id, *args, **kwargs):
+def project_action_member(request, *args, **kwargs):
     '''
     id is required
     Action options are: add, remove, view (maybe view)
     '''
-    serializer = ProjectActionSerializer(data=request.POST)
+    serializer = ProjectActionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
         project_id = data.get('id')
         action = data.get('action')
-    
+        new_member = data.get('new_member')
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
         return Response({}, status=404)
     qs = qs.filter(user=request.user)
     obj = qs.first()
-    if action == 'add' and request.user not in obj.members.all():
-        obj.members.add(request.user)
-    elif action == 'remove' and request.user in obj.members.all():
-        obj.members.remove(request.user)
+
+    #for if the user is not found
+    try:
+        member = User.objects.get(username=new_member)
+    except:
+        return Response({}, status=404)
+        
+    if action == 'add' and request.user not in obj.members.all() and obj:
+        obj.members.add(member)
+        serializer = ProjectSerializerGet(obj)
+        return Response(serializer.data, status=200)
+    elif action == 'remove' and request.user in obj.members.all() and obj:
+        obj.members.remove(member)
+        serializer = ProjectSerializerGet(obj)
+        return Response(serializer.data, status=200)
     elif action == 'view':
         pass #this is to do
-    return Response({'message': 'Action performed'}, status=200)
+    return Response({'message': 'No action user either already added or removed'}, status=200)
 
 
 
