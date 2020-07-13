@@ -19,13 +19,9 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-id']
-    def serialize(self):
-        return{
-            'id': self.id,
-            'title': self.title,
-            'begin_date': self.begin_date,
-            'description': self.description,
-            'user': self.user,
-            'progress': self.progress
-        }
+
+    #for if i need to include this
+    #@property
+    #def do_something(self):
+    #    return 2
     

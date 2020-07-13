@@ -34,6 +34,7 @@ class ProjectSerializerPost(serializers.ModelSerializer):
         if len(value) > MAX_TITLE_LENGTH:
             raise serializers.ValidationError('Description is over 120 characters')
         return value
+        
 #for viewing data
 class ProjectSerializerGet(serializers.ModelSerializer):
     members = serializers.SerializerMethodField(read_only=True)
