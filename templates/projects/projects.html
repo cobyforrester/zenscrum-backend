@@ -60,13 +60,13 @@ const getCookie = (name) =>
 
 let handleMemberAction = (project_id, form, action) =>
 {
-    let new_member= document.getElementById(form).value;
-    const url = "/api/projects/action"
+    let member = document.getElementById(form).value;
+    const url = "/api/projects/action/"
     const method = "POST"
     const data = JSON.stringify({
         id: project_id,
         action: action,
-        new_member: new_member
+        member: member
     })
     const xhr = new XMLHttpRequest()
     const csrftoken = getCookie('csrftoken');
@@ -206,9 +206,17 @@ let formatProjectElement = (item) =>
     tempElem += "<p>Start: " + item.begin_date + "</p>";
     tempElem += "<p>Description: " + item.description + "</p>";
     tempElem += "<p>ID: " + item.id + "</p>";
-    tempElem += "<p>Owner: " + item.user + "</p>";
+    tempElem += "<p>Owner: " + item.user.username + "</p>";
     tempElem += "<p>Progress: " + item.progress + "</p>";
-    tempElem += "<p>Members: " + item.members + "</p>";
+
+    //Yes this should be changed
+    members = ''
+    if(Object.keys(item.members).length >= 0)
+    {
+        members = item.members.username
+    }
+    tempElem += "<p>Members: " + members + "</p>";
+
     tempElem += "<div class='btn-group'><button class='btn btn-primary'";
     tempElem += "onclick=\"window.location=\'sprints-home/"+ item.id + "\'\"";
     tempElem += ">Sprints</button></div>";

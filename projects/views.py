@@ -66,14 +66,15 @@ def delete_project(request, project_id, *args, **kwargs):
 def project_action_member(request, *args, **kwargs):
     '''
     id is required
-    Action options are: add, remove, view (maybe view)
+    member username is required
+    Action options are for member: add, remove
     '''
     serializer = ProjectActionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
         project_id = data.get('id')
         action = data.get('action')
-        new_member = data.get('new_member')
+        member_username = data.get('member')
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
         return Response({}, status=404)
@@ -81,17 +82,16 @@ def project_action_member(request, *args, **kwargs):
     obj = qs.first()
     if not obj:
         return Response({}, status=403)
-
     #for if the user is not found
     try:
-        member = User.objects.get(username=new_member)
+        member = User.objects.get(username=member_username)
     except:
         return Response({}, status=404)
-    if action == 'add' and obj and request.user not in obj.members.all():
+    if action == 'add' and obj and not obj.members.filter(username=member_username):
         obj.members.add(member)
         serializer = ProjectSerializerGet(obj)
         return Response(serializer.data, status=200)
-    elif action == 'remove' and obj and request.user in obj.members.all():
+    elif action == 'remove' and obj and obj.members.filter(username=member_username):
         obj.members.remove(member)
         serializer = ProjectSerializerGet(obj)
         return Response(serializer.data, status=200)

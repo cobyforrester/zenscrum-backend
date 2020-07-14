@@ -10,10 +10,10 @@ class ProjectTesctCase(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(first_name='Coby', last_name='Forrester', username='first', password='somepassword')
         self.user2 = User.objects.create_user(username='second', password='somepassword')
-        Project.objects.create(title='first proj', description='description', user=self.user1)
+        self.proj1 = Project.objects.create(title='first proj', description='description', user=self.user1)
         Project.objects.create(title='sceond proj', description='description', user=self.user1)
         Project.objects.create(title='third proj', description='description', user=self.user1)
-        
+
     def test_project_created(self):
         proj1 = Project.objects.create(title='fourth proj', description='description', user=self.user2)
         self.assertEqual(proj1.id, 4)
@@ -29,4 +29,25 @@ class ProjectTesctCase(TestCase):
         client = self.get_client()
         response = client.get('/api/projects/')
         self.assertEqual(response.status_code, 200)
-        print(response.json())
+
+    def test_project_action(self):
+        #test add
+        client = self.get_client()
+        data = {
+            'id': self.proj1.id,
+            'action': 'add',
+            'member': 'second'
+        }
+        response = client.post('/api/projects/action/', data=data)
+        self.assertEqual(response.status_code, 200)
+        response = client.get(f'/api/projects/{self.proj1.id}/')
+        self.assertEqual(response.json()['members']['username'], 'second')
+        self.assertEqual(response.status_code, 200)
+
+        #test remove
+        client = self.get_client()
+        data['action'] = 'remove'
+        response = client.post('/api/projects/action/', data=data)
+        response = client.get(f'/api/projects/{self.proj1.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['members']['username'], '')

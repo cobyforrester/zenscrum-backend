@@ -10,7 +10,7 @@ PROJECT_MEMBERS_ACTION_OPTIONS = settings.PROJECT_MEMBERS_ACTION_OPTIONS
 class ProjectActionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     action = serializers.CharField()
-    new_member = serializers.CharField()
+    member = serializers.CharField()
 
     def validate_action(self, value):
         value = value.lower().strip()
@@ -34,7 +34,7 @@ class ProjectSerializerPost(serializers.ModelSerializer):
         if len(value) > MAX_TITLE_LENGTH:
             raise serializers.ValidationError('Description is over 120 characters')
         return value
-        
+
 #for viewing data
 class ProjectSerializerGet(serializers.ModelSerializer):
     members = serializers.SerializerMethodField(read_only=True)
@@ -43,13 +43,24 @@ class ProjectSerializerGet(serializers.ModelSerializer):
         model = Project
         fields = ['id', 'title', 'begin_date', 'description', 'progress', 'user', 'members'] #add members maybe?
     def get_members(self, obj):
-        s = ''
+
+        username = name = ''
         for i in obj.members.all():
-            s += i.username + ', '
-        return s[:len(s) - 2] #list of members returned, comma taken off
+            name += i.first_name + ' ' + i.last_name + ', '
+            username += i.username + ', '
+
+        data = {
+                'name': name[:len(name) - 2],
+                'username': username[:len(username) - 2],
+            }
+        
+        return data
 
     def get_user(self, obj):
-        name = obj.user.first_name + ' ' + obj.user.last_name
-        if name == ' ':
-            name = obj.user.username
-        return name
+        data = {
+                'id': obj.user.id,
+                'first_name': obj.user.first_name,
+                'last_name': obj.user.last_name,
+                'username': obj.user.username,
+            }
+        return data
