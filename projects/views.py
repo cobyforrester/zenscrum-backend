@@ -27,7 +27,9 @@ def project_create_view(request, *args, **kwargs):
     serializer = ProjectSerializerPost(data=request.POST)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
-        return Response(serializer.data, status=201)
+        obj = Project.objects.get(id=serializer.data['id'])
+        new_serializer = ProjectSerializerGet(obj) #gets all attributes of new object
+        return Response(new_serializer.data, status=201)
     return Response({}, status=400)
 
 #gets projects
