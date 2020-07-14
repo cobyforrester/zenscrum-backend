@@ -21,18 +21,22 @@ class ProjectActionSerializer(serializers.Serializer):
 class ProjectSerializerPost(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ['id', 'title', 'begin_date', 'description', 'progress']
+        fields = ['id', 'title', 'begin_date', 'description']
 
     #validate description
     def validate_description(self, value):
         if len(value) > MAX_DESCRIPTION_LENGTH:
             raise serializers.ValidationError('Description is over 120 characters')
+        elif len(value) == 0:
+            raise serializers.ValidationError('Description required')
         return value
 
     #validate title
     def validate_title(self, value):
-        if len(value) > MAX_TITLE_LENGTH:
+        if len(value) > MAX_TITLE_LENGTH or len(value) == 0:
             raise serializers.ValidationError('Description is over 120 characters')
+        elif len(value) == 0:
+            raise serializers.ValidationError('Title required')
         return value
 
 #for viewing data

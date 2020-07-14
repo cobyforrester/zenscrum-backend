@@ -206,12 +206,19 @@ let formatProjectElement = (item) =>
     tempElem += "<p>Start: " + item.begin_date + "</p>";
     tempElem += "<p>Description: " + item.description + "</p>";
     tempElem += "<p>ID: " + item.id + "</p>";
-    tempElem += "<p>Owner: " + item.user.username + "</p>";
+
+    username = ''
+    if('user' in item)
+    {
+        username = item.user.username
+    }
+
+    tempElem += "<p>Owner: " + username + "</p>";
     tempElem += "<p>Progress: " + item.progress + "</p>";
 
     //Yes this should be changed
     members = ''
-    if(Object.keys(item.members).length >= 0)
+    if('members' in item)
     {
         members = item.members.username
     }
