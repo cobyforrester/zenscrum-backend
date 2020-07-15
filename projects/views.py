@@ -3,6 +3,7 @@ from django.conf import settings #for safe redirect, users
 from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url #for safe redirect
 from django.contrib.auth.models import User
+from django.db.models import Q #for advanced query lookups
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
@@ -36,7 +37,12 @@ def project_create_view(request, *args, **kwargs):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_projects(request, *args, **kwargs):
-    qs = Project.objects.all()
+    all_project_ids = calc_ids(request.user.username)
+    #now sort project ids and create queryset
+    print(all_project_ids)
+    all_project_ids.sort(reverse=True)
+    qs = Project.objects.filter(id__in=all_project_ids)
+    #return data
     serializer = ProjectSerializerGet(qs, many=True)
     return Response(serializer.data)
 
@@ -44,8 +50,11 @@ def view_projects(request, *args, **kwargs):
 @permission_classes([IsAuthenticated])
 def project_details(request, project_id, *args, **kwargs):
     qs = Project.objects.filter(id=project_id)
+    valid_projects = calc_ids(request.user.username)
     if not qs.exists():
         return Response({}, status=404)
+    elif project_id not in valid_projects:
+        return Response({}, status=403)
     obj = qs.first()
     serializer = ProjectSerializerGet(obj)
     return Response(serializer.data, status=200)
@@ -102,7 +111,23 @@ def project_action_member(request, *args, **kwargs):
     return Response({'message': 'No action user either already added or removed'}, status=200)
 
 
+def calc_ids(username): 
+    '''
+    This calculates the project id's our user is a part of
+    '''
+    all_project_ids = []
+    qs = UserProject.objects.all()
+    for i in qs:
+        if i.user.username == username and i.project.id not in all_project_ids:
+            all_project_ids.append(i.project.id)
+    #for all projects user is a member of 
+    qs = Project.objects.all()
+    for i in qs:
+        if i.user.username == username and i.id not in all_project_ids:
+            all_project_ids.append(i.id)
+    return all_project_ids
 
+# ================================== PURE DJANGO BELOW ================================
 def project_create_view_pure_django(request, *args, **kwargs):
     '''
     REST API VIEW

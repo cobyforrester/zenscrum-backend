@@ -13,8 +13,19 @@ class ProjectTesctCase(TestCase):
         self.user1 = User.objects.create_user(first_name='Coby', last_name='Forrester', username='first', password='somepassword')
         self.user2 = User.objects.create_user(username='second', password='somepassword')
         self.proj1 = Project.objects.create(title='first proj', description='description', user=self.user1)
-        Project.objects.create(title='sceond proj', description='description', user=self.user1)
-        Project.objects.create(title='third proj', description='description', user=self.user1)
+        self.proj2 = Project.objects.create(title='sceond proj', description='description', user=self.user1)
+        self.proj3 = Project.objects.create(title='third proj', description='description', user=self.user2)
+
+        client = self.get_client()
+        data = {
+            'id': self.proj2.id,
+            'action': 'add',
+            'member': 'second'
+        }
+        response = client.post('/api/projects/action/', data=data)
+        print(response)
+
+
 
     def test_project_created(self):
         proj = Project.objects.create(title='fourth proj', description='description', user=self.user2)
