@@ -1,1 +1,1 @@
-# scrummy-web-app-backend
+# scrummy-backend
