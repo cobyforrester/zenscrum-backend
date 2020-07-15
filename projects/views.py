@@ -40,8 +40,8 @@ def view_projects(request, *args, **kwargs):
     #now sort project ids and create queryset
     all_project_ids.sort(reverse=True)
     qs = Project.objects.filter(id__in=all_project_ids)
-    #return data
     serializer = ProjectSerializerGet(qs, many=True)
+    #serializer = ProjectSerializerGet(Project.objects.all(), many=True) This is for testing
     return Response(serializer.data)
 
 @api_view(['GET'])
