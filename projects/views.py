@@ -58,7 +58,7 @@ def project_details(request, project_id, *args, **kwargs):
     return Response(serializer.data, status=200)
 
 @api_view(['DELETE', 'POST'])
-@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
+@permission_classes([IsAuthenticated])
 def delete_project(request, project_id, *args, **kwargs):
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
@@ -71,7 +71,7 @@ def delete_project(request, project_id, *args, **kwargs):
     return Response({'message': 'Project removed'}, status=200)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
+@permission_classes([IsAuthenticated])
 def project_action_member(request, *args, **kwargs):
     '''
     id is required
