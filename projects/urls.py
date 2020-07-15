@@ -1,6 +1,5 @@
 from django.urls import path
 
-from sprints.views import sprints_home_view, sprint_details, sprint_list_view
 from projects.views import (
     projects_home_view, 
     project_details, 

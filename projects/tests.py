@@ -22,8 +22,7 @@ class ProjectTesctCase(TestCase):
             'action': 'add',
             'member': 'second'
         }
-        response = client.post('/api/projects/action/', data=data)
-        print(response)
+        client.post('/api/projects/action/', data=data)
 
 
 
@@ -42,7 +41,7 @@ class ProjectTesctCase(TestCase):
         client = self.get_client()
         response = client.get('/api/projects/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), self.num_of_projects)
+        self.assertEqual(len(response.data), self.num_of_projects - 1)
 
     def test_project_action(self):
         client = self.get_client()
@@ -76,7 +75,7 @@ class ProjectTesctCase(TestCase):
 
         response = client.get('/api/projects/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), self.num_of_projects + 1)
+        self.assertEqual(len(response.data), self.num_of_projects)
 
     def test_view_project_api(self):
         client = self.get_client()
@@ -92,4 +91,8 @@ class ProjectTesctCase(TestCase):
 
         response = client.get(f'/api/projects/{self.proj1.id}/')
         self.assertEqual(response.status_code, 404)
+        #for a project that client did not create
+        response = client.delete(f'/api/projects/{self.proj3.id}/delete/')
+        self.assertEqual(response.status_code, 401)
+
 

@@ -3,7 +3,6 @@ from django.conf import settings #for safe redirect, users
 from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url #for safe redirect
 from django.contrib.auth.models import User
-from django.db.models import Q #for advanced query lookups
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
@@ -39,7 +38,6 @@ def project_create_view(request, *args, **kwargs):
 def view_projects(request, *args, **kwargs):
     all_project_ids = calc_ids(request.user.username)
     #now sort project ids and create queryset
-    print(all_project_ids)
     all_project_ids.sort(reverse=True)
     qs = Project.objects.filter(id__in=all_project_ids)
     #return data
@@ -110,7 +108,7 @@ def project_action_member(request, *args, **kwargs):
         pass #this is to do
     return Response({'message': 'No action user either already added or removed'}, status=200)
 
-
+# ============================== Helper Functions ===================================
 def calc_ids(username): 
     '''
     This calculates the project id's our user is a part of
@@ -127,7 +125,8 @@ def calc_ids(username):
             all_project_ids.append(i.id)
     return all_project_ids
 
-# ================================== PURE DJANGO BELOW ================================
+
+# ================================== PURE DJANGO BELOW (not in use) ================================
 def project_create_view_pure_django(request, *args, **kwargs):
     '''
     REST API VIEW
