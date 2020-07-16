@@ -33,15 +33,16 @@ def project_create_view(request, *args, **kwargs):
     return Response({}, status=400)
 
 #gets projects
+# and *** means it was commented for react, beginning correct after should be removed
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# *** @permission_classes([IsAuthenticated])
 def view_projects(request, *args, **kwargs):
     all_project_ids = calc_ids(request.user.username)
     #now sort project ids and create queryset
     all_project_ids.sort(reverse=True)
     qs = Project.objects.filter(id__in=all_project_ids)
-    serializer = ProjectSerializerGet(qs, many=True)
-    #serializer = ProjectSerializerGet(Project.objects.all(), many=True) This is for testing
+    # *** serializer = ProjectSerializerGet(qs, many=True)
+    serializer = ProjectSerializerGet(Project.objects.all(), many=True) # *** for testing react
     return Response(serializer.data)
 
 @api_view(['GET'])
