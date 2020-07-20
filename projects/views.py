@@ -84,24 +84,24 @@ def project_action_member(request, *args, **kwargs):
         data = serializer.validated_data
         project_id = data.get('id')
         action = data.get('action')
-        member_username = data.get('member')
+        members_username = data.get('member')
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
-        return Response({}, status=404)
+        return Response({'message': 'Project not found'}, status=404)
     qs = qs.filter(user=request.user)
     obj = qs.first()
     if not obj:
-        return Response({}, status=403)
+        return Response({'message': 'You do not have ownerhip of this project'}, status=403)
     #for if the user is not found
     try:
-        member = User.objects.get(username=member_username)
+        member = User.objects.get(username=members_username)
     except:
         return Response({}, status=404)
-    if action == 'add' and obj and not obj.members.filter(username=member_username):
+    if action == 'add' and obj and not obj.members.filter(username=members_username):
         obj.members.add(member)
         serializer = ProjectSerializerGet(obj)
         return Response(serializer.data, status=200)
-    elif action == 'remove' and obj and obj.members.filter(username=member_username):
+    elif action == 'remove' and obj and obj.members.filter(username=members_username):
         obj.members.remove(member)
         serializer = ProjectSerializerGet(obj)
         return Response(serializer.data, status=200)
