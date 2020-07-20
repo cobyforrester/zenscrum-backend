@@ -49,7 +49,8 @@ urlpatterns = [
     #path('api/projects/<int:project_id>/delete', delete_project),
     #path('api/projects/action', project_action_member),
 
-    path('api/projects/', include('projects.urls'))
+    path('api/projects/', include('projects.urls')),
+    path('api/auth/', include('accounts.urls')),
 ]
 
 if settings.DEBUG:

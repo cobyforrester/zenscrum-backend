@@ -24,8 +24,12 @@ def projects_home_view(request, *args, **kwargs):
 #@authentication_classes([SessionAuthentication, CustomAuthentication])
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def project_create_view(request, *args, **kwargs):
-    serializer = ProjectSerializerPost(data=request.POST)
+    if request.POST:
+        serializer = ProjectSerializerPost(data=request.POST)
+    else:
+        serializer = ProjectSerializerPost(data=request.data)
     if serializer.is_valid(raise_exception=True):
+        
         serializer.save(user=request.user)
         obj = Project.objects.get(id=serializer.data['id'])
         new_serializer = ProjectSerializerGet(obj) #gets all attributes of new object
