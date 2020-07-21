@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url #for safe redirect
 from django.contrib.auth.models import User
 
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -76,7 +77,8 @@ def delete_project(request, project_id, *args, **kwargs):
     return Response({'message': 'Project removed'}, status=200)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated,])
+#@authentication_classes([])
 def project_action_member(request, *args, **kwargs):
     '''
     id is required
