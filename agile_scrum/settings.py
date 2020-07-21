@@ -26,13 +26,14 @@ SECRET_KEY = 'lu66acv$upub%36nv#^-e326l)309=kted+j7d)d04@2++k&s5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*']  #Add domain when established!!!
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  #Add domain when established!!!
 LOGIN_URL = '/login'
 #information for projects
 MAX_DESCRIPTION_LENGTH = 120 
 MAX_TITLE_LENGTH = 30
 PROJECT_MEMBERS_ACTION_OPTIONS = ['add', 'remove', 'view']
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
 
 
 # Application definition
@@ -146,8 +147,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
 
 
-CORS_ORIGIN_ALLOW_ALL = True #any website can access api with below regex
-#CORS_URLS_REGEX = r'^/api/.*$'
+
 
 DEFAULT_RENDERER_CLASSES = ['rest_framework.renderers.JSONRenderer',]
 if DEBUG:
@@ -157,10 +157,3 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
 }
-
-CORS_ORIGIN_WHITELIST = [
-    'http://google.com',
-    'http://hostname.example.com',
-    'http://localhost:8000',
-    'http://localhost:3000'
-]

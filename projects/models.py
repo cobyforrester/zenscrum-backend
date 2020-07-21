@@ -12,9 +12,9 @@ class UserProject(models.Model):
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) #this is actually the owner
     members = models.ManyToManyField(User, related_name='group_member', blank=True, through=UserProject) #to store list of people
-    title = models.TextField(default='Title', blank=False, null=False)
+    title = models.TextField(blank=False, null=False)
     begin_date = models.DateField(default=date.today, blank=False, null=False)
-    description = models.TextField(default='Description', blank=False, null=False)
+    description = models.TextField(blank=False, null=False)
     progress = models.BooleanField(default=True, null=False)
 
     class Meta:

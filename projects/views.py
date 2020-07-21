@@ -25,6 +25,7 @@ def projects_home_view(request, *args, **kwargs):
 #@authentication_classes([SessionAuthentication, CustomAuthentication])
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def project_create_view(request, *args, **kwargs):
+    print(request.POST)
     if request.POST:
         serializer = ProjectSerializerPost(data=request.POST)
     else:
