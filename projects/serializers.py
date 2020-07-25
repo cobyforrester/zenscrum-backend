@@ -26,7 +26,7 @@ class ProjectSerializerPost(serializers.ModelSerializer):
     #validate description
     def validate_description(self, value):
         if len(value) > MAX_DESCRIPTION_LENGTH:
-            raise serializers.ValidationError('Description is over 120 characters')
+            raise serializers.ValidationError('Description is over 1000 characters')
         elif len(value) == 0:
             raise serializers.ValidationError('Description required')
         return value
@@ -34,7 +34,7 @@ class ProjectSerializerPost(serializers.ModelSerializer):
     #validate title
     def validate_title(self, value):
         if len(value) > MAX_TITLE_LENGTH or len(value) == 0:
-            raise serializers.ValidationError('Description is over 120 characters')
+            raise serializers.ValidationError('Title is over 50 characters')
         elif len(value) == 0:
             raise serializers.ValidationError('Title required')
         return value
@@ -50,7 +50,8 @@ class ProjectSerializerGet(serializers.ModelSerializer):
 
         username = name = ''
         for i in obj.members.all():
-            name += i.first_name + ' ' + i.last_name + ', '
+            if i.first_name != '' and i.last_name != '':
+                name += i.first_name + ' ' + i.last_name + ', '
             username += i.username + ', '
 
         data = {

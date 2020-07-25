@@ -29,8 +29,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  #Add domain when established!!!
 LOGIN_URL = '/login'
 #information for projects
-MAX_DESCRIPTION_LENGTH = 120 
-MAX_TITLE_LENGTH = 30
+MAX_DESCRIPTION_LENGTH = 1000
+MAX_TITLE_LENGTH = 50
 PROJECT_MEMBERS_ACTION_OPTIONS = ['add', 'remove', 'view']
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'

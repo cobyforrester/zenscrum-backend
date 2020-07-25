@@ -16,6 +16,7 @@ from .serializers import ProjectSerializerPost, ProjectSerializerGet, ProjectAct
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 from .models import Project
+
 def projects_home_view(request, *args, **kwargs):
     return render(request, 'projects/projects.html', context={}, status=200)
 
@@ -41,14 +42,14 @@ def project_create_view(request, *args, **kwargs):
 #gets projects
 # and *** means it was commented for react, beginning correct after should be removed
 @api_view(['GET'])
-# *** @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def view_projects(request, *args, **kwargs):
     all_project_ids = calc_ids(request.user.username)
     #now sort project ids and create queryset
     all_project_ids.sort(reverse=True)
     qs = Project.objects.filter(id__in=all_project_ids)
-    # *** serializer = ProjectSerializerGet(qs, many=True)
-    serializer = ProjectSerializerGet(Project.objects.all(), many=True) # *** for testing react
+    serializer = ProjectSerializerGet(qs, many=True)
+    #serializer = ProjectSerializerGet(Project.objects.all(), many=True) # *** for testing react
     return Response(serializer.data)
 
 @api_view(['GET'])
