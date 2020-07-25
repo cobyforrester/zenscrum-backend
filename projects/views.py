@@ -93,6 +93,9 @@ def project_action_member(request, *args, **kwargs):
         project_id = data.get('id')
         action = data.get('action')
         members_username = data.get('member')
+
+    if request.user.username == members_username :
+        return Response({'message': 'Cannot add or remove yourself'}, status=404)
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
         return Response({'message': 'Project not found'}, status=404)
@@ -104,7 +107,7 @@ def project_action_member(request, *args, **kwargs):
     try:
         member = User.objects.get(username=members_username)
     except:
-        return Response({}, status=404)
+        return Response({'message': 'User does not exist'}, status=404)
     if action == 'add' and obj and not obj.members.filter(username=members_username):
         obj.members.add(member)
         serializer = ProjectSerializerGet(obj)
@@ -115,7 +118,7 @@ def project_action_member(request, *args, **kwargs):
         return Response(serializer.data, status=200)
     elif action == 'view':
         pass #this is to do
-    return Response({'message': 'No action user either already added or removed'}, status=200)
+    return Response({'message': 'No action user either already added or removed'}, status=400)
 
 # ============================== Helper Functions ===================================
 def calc_ids(username): 
