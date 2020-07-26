@@ -6,7 +6,8 @@ from .models import Project, UserProject
 MAX_DESCRIPTION_LENGTH = settings.MAX_DESCRIPTION_LENGTH
 MAX_TITLE_LENGTH = settings.MAX_TITLE_LENGTH
 PROJECT_MEMBERS_ACTION_OPTIONS = settings.PROJECT_MEMBERS_ACTION_OPTIONS
-
+MIN_DESCRIPTION_LENGTH = settings.MIN_DESCRIPTION_LENGTH
+MIN_TITLE_LENGTH = settings.MIN_TITLE_LENGTH
 class ProjectActionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     action = serializers.CharField()
@@ -26,17 +27,17 @@ class ProjectSerializerPost(serializers.ModelSerializer):
     #validate description
     def validate_description(self, value):
         if len(value) > MAX_DESCRIPTION_LENGTH:
-            raise serializers.ValidationError('Description is over 1000 characters')
-        elif len(value) == 0:
-            raise serializers.ValidationError('Description required')
+            raise serializers.ValidationError('Description is over ' + str(MAX_DESCRIPTION_LENGTH) +' characters')
+        elif len(value) < MIN_DESCRIPTION_LENGTH:
+            raise serializers.ValidationError('Description must be at least '+ str(MIN_DESCRIPTION_LENGTH) + ' characters long')
         return value
 
     #validate title
     def validate_title(self, value):
         if len(value) > MAX_TITLE_LENGTH or len(value) == 0:
-            raise serializers.ValidationError('Title is over 50 characters')
-        elif len(value) == 0:
-            raise serializers.ValidationError('Title required')
+            raise serializers.ValidationError('Title is over ' + str(MAX_TITLE_LENGTH) + ' characters')
+        elif len(value) < MIN_TITLE_LENGTH:
+            raise serializers.ValidationError('Title must be at least ' + str(MIN_TITLE_LENGTH) + ' characters long')
         return value
 
 #for viewing data

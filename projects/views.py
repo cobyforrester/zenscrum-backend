@@ -80,7 +80,6 @@ def delete_project(request, project_id, *args, **kwargs):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,])
-#@authentication_classes([])
 def project_action_member(request, *args, **kwargs):
     '''
     id is required
@@ -94,6 +93,7 @@ def project_action_member(request, *args, **kwargs):
         action = data.get('action')
         members_username = data.get('member')
 
+    #users cannot add or remove themselves 
     if request.user.username == members_username :
         return Response({'message': 'Cannot add or remove yourself'}, status=404)
     qs = Project.objects.filter(id=project_id)
@@ -101,6 +101,7 @@ def project_action_member(request, *args, **kwargs):
         return Response({'message': 'Project not found'}, status=404)
     qs = qs.filter(user=request.user)
     obj = qs.first()
+    #if no object exists then they do not have access
     if not obj:
         return Response({'message': 'You do not have ownerhip of this project'}, status=403)
     #for if the user is not found
@@ -118,7 +119,7 @@ def project_action_member(request, *args, **kwargs):
         return Response(serializer.data, status=200)
     elif action == 'view':
         pass #this is to do
-    return Response({'message': 'No action user either already added or removed'}, status=400)
+    return Response({'message': 'No action, user either already added or removed'}, status=400)
 
 # ============================== Helper Functions ===================================
 def calc_ids(username): 

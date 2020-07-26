@@ -4,7 +4,7 @@ from django.db import models
 
 User = settings.AUTH_USER_MODEL
 
-class UserProject(models.Model):
+class UserProject(models.Model): #should be called members
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey("Project", on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)

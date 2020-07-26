@@ -50,6 +50,7 @@ urlpatterns = [
     #path('api/projects/action', project_action_member),
 
     path('api/projects/', include('projects.urls')),
+    path('api/sprints/', include('sprints.urls')),
     path('api/auth/', include('accounts.urls')),
 ]
 
