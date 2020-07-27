@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .serializers import SprintSerializerPost, SprintSerializerGet
 
-from projects.models import UserProject
+from projects.models import UserProject, Project
 from .models import Sprint
 def sprints_home_view(request, project_number, *args, **kwargs):
     #do something with project number
@@ -38,10 +38,13 @@ def sprint_create_view(request, *args, **kwargs):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_sprints(request, project_id, *args, **kwargs): 
-    #CHECK IF USER HAS AUTHORITY TO VIEW SPRINT
-    qs = Sprint.objects.filter(project=project_id) #we want project id to query all sprints
-    serializer = SprintSerializerGet(qs, many=True)
-    return Response(serializer.data, status=200)
+    all_project_ids = calc_project_ids(request.user.username)
+    #now sort project ids and create queryset
+    if project_id in all_project_ids:
+        qs = Sprint.objects.filter(project=project_id) #we want project id to query all sprints
+        serializer = SprintSerializerGet(qs, many=True)
+        return Response(serializer.data, status=200)
+    return Response({'message': 'You cannot access these sprints'}, status=401)
 
 @api_view(['DELETE', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -71,7 +74,6 @@ def sprint_details(request, sprint_id, *args, **kwargs):
     for i in qs:
         if i.project.id == obj.project.id and i.user.username == request.user.username:
             found = True
-
     if obj.project.user.username == request.user.username or found:
         serializer = SprintSerializerGet(obj)
         return Response(serializer.data, status=200)
@@ -81,6 +83,22 @@ def sprint_details(request, sprint_id, *args, **kwargs):
 # ============================= HELPER FUNCTIONS =============================
 def calc_sprint_num(project_id):
     return Sprint.objects.filter(project=project_id).count() + 1
+
+def calc_project_ids(username): 
+    '''
+    This calculates the project id's our user is a part of
+    '''
+    all_project_ids = []
+    qs = UserProject.objects.all()
+    for i in qs:
+        if i.user.username == username and i.project.id not in all_project_ids:
+            all_project_ids.append(i.project.id)
+    #for all projects user is a member of 
+    qs = Project.objects.all()
+    for i in qs:
+        if i.user.username == username and i.id not in all_project_ids:
+            all_project_ids.append(i.id)
+    return all_project_ids
 
 
 
