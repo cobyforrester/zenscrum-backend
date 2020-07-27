@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .serializers import SprintSerializerPost, SprintSerializerGet
 
+from projects.models import UserProject
 from .models import Sprint
 def sprints_home_view(request, project_number, *args, **kwargs):
     #do something with project number
@@ -15,7 +16,7 @@ def sprints_home_view(request, project_number, *args, **kwargs):
 
 
 @api_view(['POST'])
-#@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
+@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def sprint_create_view(request, *args, **kwargs):
     if request and request.POST:
         serializer = SprintSerializerPost(data=request.POST)
@@ -28,13 +29,56 @@ def sprint_create_view(request, *args, **kwargs):
         serializer.validated_data
         sprint_number = calc_sprint_num(serializer.validated_data['project'])
         serializer.save(number=sprint_number)
-        #print(Sprint.objects.all().first().number)
         obj = Sprint.objects.get(id=serializer.data['id'])
-        print(obj)
         new_serializer = SprintSerializerGet(obj) #gets all attributes of new object
         return Response(new_serializer.data, status=201)
     return Response({}, status=400)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def view_sprints(request, project_id, *args, **kwargs): 
+    #CHECK IF USER HAS AUTHORITY TO VIEW SPRINT
+    qs = Sprint.objects.filter(project=project_id) #we want project id to query all sprints
+    serializer = SprintSerializerGet(qs, many=True)
+    return Response(serializer.data, status=200)
+
+@api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated])
+def delete_sprint(request, sprint_id, *args, **kwargs):
+    qs = Sprint.objects.filter(id=sprint_id)
+    if not qs.exists():
+        return Response({'message': 'Sprint not found'}, status=404)
+    qs = qs.filter(project__user__username=request.user.username)
+    if not qs.exists():
+        return Response({'message': 'You cannot delete this sprint'}, status=401)
+    obj = qs.first()
+    obj.delete()
+    return Response({'message': 'Sprint removed'}, status=200)
+
+@api_view(['GET'])
+#@permission_classes([IsAuthenticated])
+def sprint_details(request, sprint_id, *args, **kwargs):
+    qs = Sprint.objects.filter(id=sprint_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    obj = qs.first()
+    print(obj.project.members)
+
+    #for seeing if they have access to project
+    found = False
+    qs = UserProject.objects.all()
+    for i in qs:
+        if i.project.id == obj.project.id and i.user.username == request.user.username:
+            found = True
+
+    if obj.project.user.username == request.user.username or found:
+        serializer = SprintSerializerGet(obj)
+        return Response(serializer.data, status=200)
+    return Response({}, status=401) 
+
+
+# ============================= HELPER FUNCTIONS =============================
 def calc_sprint_num(project_id):
     return Sprint.objects.filter(project=project_id).count() + 1
 
@@ -63,7 +107,7 @@ def sprint_list_view(request, project_id, *args, **kwargs):
     }
     return JsonResponse(data)
 
-def sprint_details(request, sprint_number, *args, **kwargs):
+def django_sprint_details(request, sprint_number, *args, **kwargs):
     '''
     REST API VIEW
     Consume by JavaScript/React

@@ -50,7 +50,7 @@ def view_projects(request, *args, **kwargs):
     qs = Project.objects.filter(id__in=all_project_ids)
     serializer = ProjectSerializerGet(qs, many=True)
     #serializer = ProjectSerializerGet(Project.objects.all(), many=True) # *** for testing react
-    return Response(serializer.data)
+    return Response(serializer.data, status=200)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

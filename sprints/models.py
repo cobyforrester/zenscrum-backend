@@ -11,3 +11,5 @@ class Sprint(models.Model):
     end_date = models.DateField(blank=False, null=False)
     goal = models.TextField(blank=False, null=False)
     image = models.FileField(upload_to='images/', blank=True, null=True)
+    class Meta:
+        ordering = ['number']
