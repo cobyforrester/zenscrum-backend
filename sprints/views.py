@@ -27,8 +27,7 @@ def sprint_create_view(request, *args, **kwargs):
     # CHECK IF USER HAS AUTHORITY TO CREATE SPRINT
     if serializer.is_valid(raise_exception=True):
         serializer.validated_data
-        sprint_number = calc_sprint_num(serializer.validated_data['project'])
-        serializer.save(number=sprint_number)
+        serializer.save()
         obj = Sprint.objects.get(id=serializer.data['id'])
         new_serializer = SprintSerializerGet(obj) #gets all attributes of new object
         return Response(new_serializer.data, status=201)
@@ -81,8 +80,6 @@ def sprint_details(request, sprint_id, *args, **kwargs):
 
 
 # ============================= HELPER FUNCTIONS =============================
-def calc_sprint_num(project_id):
-    return Sprint.objects.filter(project=project_id).count() + 1
 
 def calc_project_ids(username): 
     '''
