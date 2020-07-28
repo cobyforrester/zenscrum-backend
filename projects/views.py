@@ -65,6 +65,26 @@ def project_details(request, project_id, *args, **kwargs):
     serializer = ProjectSerializerGet(obj)
     return Response(serializer.data, status=200)
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def update_project(request, project_id, *args, **kwargs):
+    qs = Project.objects.filter(id=project_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    obj = qs.first()
+    if request.user != obj.user:
+        return Response({}, status=403)
+    try:
+        obj.title = request.data['title']
+        obj.description = request.data['description']
+        obj.save()
+    except:
+        return Response({}, status=404)
+    serializer = ProjectSerializerGet(obj)
+    return Response(serializer.data, status=200)
+
+
 @api_view(['DELETE', 'POST'])
 @permission_classes([IsAuthenticated])
 def delete_project(request, project_id, *args, **kwargs):

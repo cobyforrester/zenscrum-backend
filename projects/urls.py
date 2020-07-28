@@ -6,7 +6,8 @@ from projects.views import (
     view_projects, 
     project_create_view, 
     delete_project, 
-    project_action_member
+    project_action_member,
+    update_project
 )
 '''
 CLIENT
@@ -19,4 +20,5 @@ urlpatterns = [
     path('create/', project_create_view),
     path('<int:project_id>/', project_details),
     path('<int:project_id>/delete/', delete_project),
+    path('<int:project_id>/update/', update_project),
 ]
