@@ -11,4 +11,4 @@ class Sprint(models.Model):
     goal = models.TextField(blank=False, null=False)
     image = models.FileField(upload_to='images/', blank=True, null=True)
     class Meta:
-        ordering = ['id']
+        ordering = ['start_date']
