@@ -37,7 +37,7 @@ PROJECT_MEMBERS_ACTION_OPTIONS = ['add', 'remove', 'view']
 
 #information for sprints
 MAX_GOAL_LENGTH = 1000
-MIN_GOAL_LENGTH = 50
+MIN_GOAL_LENGTH = 20
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'

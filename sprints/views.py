@@ -18,6 +18,7 @@ def sprints_home_view(request, project_number, *args, **kwargs):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def sprint_create(request, *args, **kwargs):
+    print('here')
     serializer = SprintSerializerPost(data=request.data)
     # CHECK IF USER HAS AUTHORITY TO CREATE SPRINT
     project_obj = Project.objects.get(id=request.data['project'])
