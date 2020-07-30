@@ -17,14 +17,12 @@ def sprints_home_view(request, project_number, *args, **kwargs):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
-def sprint_create_view(request, *args, **kwargs):
-    if request and request.POST:
-        serializer = SprintSerializerPost(data=request.POST)
-    elif request and request.data:
-        serializer = SprintSerializerPost(data=request.data)
-    else:
-        return Response({}, status=400)
+def sprint_create(request, *args, **kwargs):
+    serializer = SprintSerializerPost(data=request.data)
     # CHECK IF USER HAS AUTHORITY TO CREATE SPRINT
+    project_obj = Project.objects.get(id=request.data['project'])
+    if request.user.username != project_obj.user.username:
+        return Response({}, status=401)
     if serializer.is_valid(raise_exception=True):
         serializer.validated_data
         serializer.save()
@@ -32,6 +30,24 @@ def sprint_create_view(request, *args, **kwargs):
         new_serializer = SprintSerializerGet(obj) #gets all attributes of new object
         return Response(new_serializer.data, status=201)
     return Response({}, status=400)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
+def sprint_update(request, sprint_id, *args, **kwargs):
+    sprint_obj = Sprint.objects.get(id=sprint_id)
+    if request.user.username != sprint_obj.project.user.username:
+        return Response({}, status=401)
+    try:
+        # SHOULD VALIDATE DATA
+        obj = Sprint.objects.get(id=sprint_id)
+        obj.goal = request.data['goal']
+        obj.start_date = request.data['start_date']
+        obj.end_date = request.data['end_date']
+        obj.save()
+    except:
+        return Response({}, status=400)
+    new_serializer = SprintSerializerGet(obj) #gets all attributes of new object
+    return Response(new_serializer.data, status=201)
 
 
 @api_view(['GET'])

@@ -69,6 +69,7 @@ def project_details(request, project_id, *args, **kwargs):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def update_project(request, project_id, *args, **kwargs):
+    # SHOULD VALIDATE DATA
     qs = Project.objects.filter(id=project_id)
     if not qs.exists():
         return Response({}, status=404)
