@@ -39,6 +39,12 @@ PROJECT_MEMBERS_ACTION_OPTIONS = ['add', 'remove', 'view']
 MAX_GOAL_LENGTH = 1000
 MIN_GOAL_LENGTH = 20
 
+#information for tasks
+MAX_DESCRIPTION_LENGTH_TASK = 1000
+MIN_DESCRIPTION_LENGTH_TASK = 20
+MAX_TITLE_LENGTH_TASK = 50
+MIN_TITLE_LENGTH_TASK = 3
+
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
 
@@ -60,6 +66,7 @@ INSTALLED_APPS = [
     #internal
     'sprints',
     'projects',
+    'tasks',
     'accounts',
 ]
 

@@ -18,7 +18,6 @@ def sprints_home_view(request, project_number, *args, **kwargs):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def sprint_create(request, *args, **kwargs):
-    print('here')
     serializer = SprintSerializerPost(data=request.data)
     # CHECK IF USER HAS AUTHORITY TO CREATE SPRINT
     project_obj = Project.objects.get(id=request.data['project'])
@@ -76,7 +75,7 @@ def delete_sprint(request, sprint_id, *args, **kwargs):
     return Response({'message': 'Sprint removed'}, status=200)
 
 @api_view(['GET'])
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def sprint_details(request, sprint_id, *args, **kwargs):
     qs = Sprint.objects.filter(id=sprint_id)
     if not qs.exists():

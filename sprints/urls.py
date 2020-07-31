@@ -9,7 +9,7 @@ from sprints.views import (
 )
 '''
 CLIENT
-Base ENDPOINT  /api/projects/
+Base ENDPOINT  /api/sprints/
 '''
 urlpatterns = [
     #sprints

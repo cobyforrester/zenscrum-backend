@@ -25,7 +25,7 @@ class SprintSerializerPost(serializers.ModelSerializer):
 class SprintSerializerGet(serializers.ModelSerializer):
     class Meta:
         model = Sprint
-        fields = ['id', 'start_date', 'end_date', 'goal']
+        fields = ['id', 'start_date', 'end_date', 'goal', 'project']
 
     #validate goal
     def validate_goal(self, value):
