@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY_SCRUMMY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG_VALUE_SCRUMMY')
+DEBUG = (os.environ.get('DEBUG_VALUE_SCRUMMY')=='True')
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'scrummy-backend.herokuapp.com']  #Add domain when established!!!
 LOGIN_URL = '/login'
