@@ -24,14 +24,9 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    #test
-    path('react/', TemplateView.as_view(template_name='react.html')),
 
     path('api/projects/', include('projects.urls')),
     path('api/sprints/', include('sprints.urls')),
     path('api/tasks/', include('tasks.urls')),
     path('api/auth/', include('accounts.urls')),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
