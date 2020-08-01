@@ -21,12 +21,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'lu66acv$upub%36nv#^-e326l)309=kted+j7d)d04@2++k&s5'
+#SECRET_KEY = 'lu66acv$upub%36nv#^-e326l)309=kted+j7d)d04@2++k&s5'
+SECRET_KEY = os.environ.get('SECRET_KEY_SCRUMMY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DEBUG_VALUE_SCRUMMY')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  #Add domain when established!!!
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'scrummy-backend.herokuapp.com']  #Add domain when established!!!
 LOGIN_URL = '/login'
 #information for projects
 MAX_DESCRIPTION_LENGTH = 1000
