@@ -24,9 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'lu66acv$upub%36nv#^-e326l)309=kted+j7d)d04@2++k&s5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*']  #Add domain when established!!!
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  #Add domain when established!!!
 LOGIN_URL = '/login'
 #information for projects
 MAX_DESCRIPTION_LENGTH = 1000
