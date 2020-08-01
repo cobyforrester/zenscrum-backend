@@ -107,7 +107,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'agile_scrum.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
