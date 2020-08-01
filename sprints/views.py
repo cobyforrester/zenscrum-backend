@@ -10,9 +10,6 @@ from .serializers import SprintSerializerPost, SprintSerializerGet
 
 from projects.models import UserProject, Project
 from .models import Sprint
-def sprints_home_view(request, project_number, *args, **kwargs):
-    #do something with project number
-    return render(request, 'sprints/sprints.html', context={}, status=200)
 
 
 @api_view(['POST'])

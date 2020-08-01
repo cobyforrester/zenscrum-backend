@@ -21,33 +21,11 @@ from django.views.generic import TemplateView
 
 
 
-from sprints.views import sprints_home_view, sprint_details, sprint_list_view
-from projects.views import (
-    projects_home_view, 
-    project_details, 
-    view_projects, 
-    project_create_view, 
-    delete_project, 
-    project_action_member
-)
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     #test
     path('react/', TemplateView.as_view(template_name='react.html')),
-
-    #sprints
-    path('sprints-home/<int:project_number>', sprints_home_view),
-    path('sprints/<int:project_id>', sprint_list_view),
-    path('sprint/<int:sprint_number>', sprint_details),
-
-    #projects
-    path('', projects_home_view),
-    path('create-project', project_create_view),
-    path('view-projects', view_projects),
-    path('project/<int:project_id>', project_details),
-    #path('api/projects/<int:project_id>/delete', delete_project),
-    #path('api/projects/action', project_action_member),
 
     path('api/projects/', include('projects.urls')),
     path('api/sprints/', include('sprints.urls')),
