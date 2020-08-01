@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # BASE_DIR is where manage.py is
@@ -21,7 +22,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'lu66acv$upub%36nv#^-e326l)309=kted+j7d)d04@2++k&s5'
 SECRET_KEY = os.environ.get('SECRET_KEY_SCRUMMY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -113,8 +113,11 @@ WSGI_APPLICATION = 'agile_scrum.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'scrummy',
+        'USER': os.environ.get('SCRUMMY_PSQL_USER'),
+        'PASSWORD': os.environ.get('SCRUMMY_PSQL_PASS'),
+        'HOST': 'localhost'
     }
 }
 
@@ -172,3 +175,5 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
 }
+
+django_heroku.settings(locals())
