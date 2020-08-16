@@ -1,2 +1,2 @@
 # ZenScrum Backend
-Backend for ZenScrum project! (Django, DRF)
+Backend for ZenScrum project! (Django, DRF, PostgreSQL)
