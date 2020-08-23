@@ -44,7 +44,7 @@ def sprint_update(request, sprint_id, *args, **kwargs):
     except:
         return Response({}, status=400)
     new_serializer = SprintSerializerGet(obj) #gets all attributes of new object
-    return Response(new_serializer.data, status=201)
+    return Response(new_serializer.data, status=200)
 
 
 @api_view(['GET'])
