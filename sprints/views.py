@@ -28,7 +28,7 @@ def sprint_create(request, *args, **kwargs):
         return Response(new_serializer.data, status=201)
     return Response({}, status=400)
 
-@api_view(['POST'])
+@api_view(['POST', 'PATCH'])
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def sprint_update(request, sprint_id, *args, **kwargs):
     sprint_obj = Sprint.objects.get(id=sprint_id)

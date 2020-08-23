@@ -66,7 +66,7 @@ def project_details(request, project_id, *args, **kwargs):
     return Response(serializer.data, status=200)
 
 
-@api_view(['POST'])
+@api_view(['POST', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def update_project(request, project_id, *args, **kwargs):
     # SHOULD VALIDATE DATA

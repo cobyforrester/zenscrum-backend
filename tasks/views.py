@@ -32,7 +32,7 @@ def task_create(request, *args, **kwargs):
         return Response(new_serializer.data, status=201)
     return Response({}, status=400)
 
-@api_view(['POST'])
+@api_view(['POST', 'PATCH'])
 @permission_classes([IsAuthenticated]) #if user is authenticated can do otherwise no
 def task_update(request, task_id, *args, **kwargs):
     try:
